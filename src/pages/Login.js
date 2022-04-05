@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions';
@@ -26,15 +27,9 @@ class Login extends Component {
     }, this.validateButton);
   }
 
-  // handleClick = () => {
-  //   const { token } = this.props;
-  //   token();
-  // }
-
   render() {
     const { name, email, isButtonDisabled } = this.state;
     const { token, history } = this.props;
-    console.log(this.props);
     return (
       <form>
         <h1>Login</h1>
@@ -76,5 +71,10 @@ class Login extends Component {
 const mapDispatchToProps = (dispatch) => ({
   token: () => dispatch(fetchToken()),
 });
+
+Login.propTypes = {
+  token: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
 export default connect(null, mapDispatchToProps)(Login);
