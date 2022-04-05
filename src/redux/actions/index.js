@@ -1,5 +1,10 @@
 export const GET_TOKEN = 'GET_TOKEN';
 
+export const player = (name) => ({
+  type: 'GET_NAME',
+  name,
+});
+
 const requestToken = (token) => ({ type: GET_TOKEN, token });
 const failRequest = (error) => ({ type: 'FAIL', error });
 

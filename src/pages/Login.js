@@ -13,6 +13,7 @@ class Login extends Component {
     };
   }
 
+
   validateButton = () => {
     const { name, email } = this.state;
     const regexEmail = /[a-zA-Z0-9._]+@[a-zA-Z]+\.[a-zA-Z.]*\w$/;
