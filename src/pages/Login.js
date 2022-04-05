@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 class Login extends Component {
   constructor() {
@@ -8,6 +9,12 @@ class Login extends Component {
       email: '',
       isButtonDisabled: true,
     };
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const { history } = this.props;
+    history.push('/play');
   }
 
   validateButton = () => {
@@ -51,7 +58,7 @@ class Login extends Component {
           type="submit"
           data-testid="btn-play"
           disabled={ isButtonDisabled }
-          onClick={ (event) => event.preventDefault() }
+          onClick={ () => this.handleSubmit }
         >
           PLAY
         </button>
@@ -60,4 +67,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect()(Login);
