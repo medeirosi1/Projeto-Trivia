@@ -31,39 +31,50 @@ class Login extends Component {
     const { name, email, isButtonDisabled } = this.state;
     const { token, history } = this.props;
     return (
-      <form>
-        <h1>Login</h1>
-        <input
-          type="text"
-          placeholder="Nome"
-          name="name"
-          value={ name }
-          data-testid="input-player-name"
-          onChange={ this.handleChange }
-          required
-        />
-        <input
-          type="email"
-          placeholder="E-mail"
-          name="email"
-          value={ email }
-          data-testid="input-gravatar-email"
-          onChange={ this.handleChange }
-          required
-        />
-        <button
-          type="submit"
-          data-testid="btn-play"
-          disabled={ isButtonDisabled }
-          onClick={ (ev) => {
-            ev.preventDefault();
-            token();
-            history.push('/play');
-          } }
-        >
-          PLAY
-        </button>
-      </form>
+      <div>
+        <header>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ () => history.push('/config') }
+          >
+            Configuração
+          </button>
+        </header>
+        <form>
+          <h1>Login</h1>
+          <input
+            type="text"
+            placeholder="Nome"
+            name="name"
+            value={ name }
+            data-testid="input-player-name"
+            onChange={ this.handleChange }
+            required
+          />
+          <input
+            type="email"
+            placeholder="E-mail"
+            name="email"
+            value={ email }
+            data-testid="input-gravatar-email"
+            onChange={ this.handleChange }
+            required
+          />
+          <button
+            type="submit"
+            data-testid="btn-play"
+            disabled={ isButtonDisabled }
+            onClick={ (ev) => {
+              ev.preventDefault();
+              token();
+              history.push('/play');
+            } }
+          >
+            PLAY
+          </button>
+        </form>
+      </div>
     );
   }
 }
