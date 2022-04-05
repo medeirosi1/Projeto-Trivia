@@ -1,7 +1,11 @@
-const initialState =  '';
+import { GET_TOKEN } from '../actions';
 
-const tokenReducer = (state = initialState, action}) => {
+const initialState = '';
+
+const tokenReducer = (state = initialState, action) => {
   switch (action.type) {
+  case GET_TOKEN:
+    return action.token;
   default:
     return state;
   }

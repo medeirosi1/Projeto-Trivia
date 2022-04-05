@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
 
-export default class Play extends Component {
+class Game extends Component {
   render() {
     return (
       <div>
@@ -10,3 +10,5 @@ export default class Play extends Component {
     );
   }
 }
+
+export default Game;
