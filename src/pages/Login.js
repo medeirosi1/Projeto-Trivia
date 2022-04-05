@@ -11,11 +11,6 @@ class Login extends Component {
     };
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const { history } = this.props;
-    history.push('/play');
-  }
 
   validateButton = () => {
     const { name, email } = this.state;
@@ -58,7 +53,7 @@ class Login extends Component {
           type="submit"
           data-testid="btn-play"
           disabled={ isButtonDisabled }
-          onClick={ () => this.handleSubmit }
+          onClick={  }
         >
           PLAY
         </button>
