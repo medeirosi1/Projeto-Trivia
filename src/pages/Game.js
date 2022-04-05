@@ -1,16 +1,36 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchToken } from '../redux/actions';
 
 class Game extends Component {
+  constructor() {
+    super();
+    this.state = {
+      results: [],
+    };
+  }
+
   async componentDidMount() {
+    const { getToken } = this.props;
+    const result = this.requestQuestions();
+    const requestFailed = 3;
+    if (result.response_code === requestFailed) {
+      await getToken();
+      this.requestQuestions();
+    }
+  }
+
+  requestQuestions = async () => {
     const { token } = this.props;
     const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
     const result = await response.json();
-    console.log(result);
+    this.setState({ results: result.results });
+    return result;
   }
 
   render() {
+    // const {  } = this.state;
     return (
       <div>Game</div>
     );
@@ -19,10 +39,15 @@ class Game extends Component {
 
 Game.propTypes = {
   token: PropTypes.string.isRequired,
+  getToken: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(Game);
+const mapDispatchToProps = (dispatch) => ({
+  getToken: () => dispatch(fetchToken()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);
