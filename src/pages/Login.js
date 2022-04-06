@@ -29,8 +29,9 @@ class Login extends Component {
     }, this.validateButton);
   }
 
-  handleClickSubmit = () => {
+  handleClickSubmit = async (event) => {
     const { getToken, history, dispatchPlayerData } = this.props;
+    event.preventDefault();
     await getToken();
     dispatchPlayerData(this.state);
     history.push('/play');
