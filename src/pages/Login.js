@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions';
+import setPlayerData from '../redux/actions/playerAction';
 
 class Login extends Component {
   constructor() {
@@ -9,10 +10,10 @@ class Login extends Component {
     this.state = {
       name: '',
       email: '',
+      score: 0,
       isButtonDisabled: true,
     };
   }
-
 
   validateButton = () => {
     const { name, email } = this.state;
@@ -28,16 +29,27 @@ class Login extends Component {
     }, this.validateButton);
   }
 
+  handleClickSubmit = () => {
+    const { token, history, dispatchPlayerData } = this.props;
+    token();
+    dispatchPlayerData(this.state);
+    history.push('/play');
+  }
+
+  handleSettingsBtnClick = () => {
+    const { history } = this.props;
+    history.push('/config');
+  }
+
   render() {
     const { name, email, isButtonDisabled } = this.state;
-    const { token, history } = this.props;
     return (
       <div>
         <header>
           <button
             type="button"
             data-testid="btn-settings"
-            onClick={ () => history.push('/config') }
+            onClick={ this.handleSettingsBtnClick }
           >
             Configuração
           </button>
@@ -66,11 +78,7 @@ class Login extends Component {
             type="submit"
             data-testid="btn-play"
             disabled={ isButtonDisabled }
-            onClick={ (ev) => {
-              ev.preventDefault();
-              token();
-              history.push('/play');
-            } }
+            onClick={ this.handleClickSubmit }
           >
             PLAY
           </button>
@@ -82,11 +90,13 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   token: () => dispatch(fetchToken()),
+  dispatchPlayerData: (playerData) => dispatch(setPlayerData(playerData)),
 });
 
 Login.propTypes = {
   token: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  dispatchPlayerData: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
