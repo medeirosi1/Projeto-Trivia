@@ -29,9 +29,10 @@ class Login extends Component {
     }, this.validateButton);
   }
 
-  handleClickSubmit = () => {
-    const { token, history, dispatchPlayerData } = this.props;
-    token();
+  handleClickSubmit = async (event) => {
+    const { getToken, history, dispatchPlayerData } = this.props;
+    event.preventDefault();
+    await getToken();
     dispatchPlayerData(this.state);
     history.push('/play');
   }
@@ -89,12 +90,12 @@ class Login extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  token: () => dispatch(fetchToken()),
+  getToken: () => dispatch(fetchToken()),
   dispatchPlayerData: (playerData) => dispatch(setPlayerData(playerData)),
 });
 
 Login.propTypes = {
-  token: PropTypes.func.isRequired,
+  getToken: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
   dispatchPlayerData: PropTypes.func.isRequired,
 };
