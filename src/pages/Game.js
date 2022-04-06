@@ -1,3 +1,4 @@
+import he from 'he';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -8,12 +9,13 @@ class Game extends Component {
     super();
     this.state = {
       results: [],
+      index: 0,
     };
   }
 
   async componentDidMount() {
     const { getToken } = this.props;
-    const result = this.requestQuestions();
+    const result = await this.requestQuestions();
     const requestFailed = 3;
     if (result.response_code === requestFailed) {
       await getToken();
@@ -29,10 +31,53 @@ class Game extends Component {
     return result;
   }
 
-  render() {
-    // const {  } = this.state;
+  renderQuestions = () => {
+    const { results, index } = this.state;
+    const { category, question,
+      correct_answer: correctAnswer,
+      incorrect_answers: incorrectAnswer } = results[index];
+    const answers = [...incorrectAnswer, correctAnswer];
+    const half = 0.5;
+
     return (
-      <div>Game</div>
+      <>
+        <h3 data-testid="question-category">{category}</h3>
+        <p data-testid="question-text">{he.decode(question)}</p>
+        <div data-testid="answer-options">
+          {answers.sort(() => Math.random() - half)
+            .map((answer) => (
+              <button
+                type="button"
+                key={ answer }
+                data-testid={ answer === correctAnswer
+                  ? 'correct-answer'
+                  : `wrong-answer-${incorrectAnswer.indexOf(answer)}` }
+              >
+                {he.decode(answer)}
+              </button>
+            ))}
+        </div>
+        <br />
+        <button
+          type="button"
+          onClick={ () => this.setState({ index: index + 1 }) }
+        >
+          Próxima pergunta
+        </button>
+      </>
+    );
+  };
+
+  render() {
+    const { results } = this.state; //
+
+    return (
+      <div>
+        Game
+        {results.length
+          ? this.renderQuestions()
+          : ''}
+      </div>
     );
   }
 }

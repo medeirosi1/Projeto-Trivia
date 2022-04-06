@@ -55,9 +55,9 @@ class Login extends Component {
           type="submit"
           data-testid="btn-play"
           disabled={ isButtonDisabled }
-          onClick={ (ev) => {
+          onClick={ async (ev) => {
             ev.preventDefault();
-            token();
+            await token();
             history.push('/play');
           } }
         >
