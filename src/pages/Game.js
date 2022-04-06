@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { fetchToken } from '../redux/actions';
+import '../styles/Game.css';
 
 class Game extends Component {
   constructor() {
@@ -44,12 +45,20 @@ class Game extends Component {
       <>
         <h3 data-testid="question-category">{category}</h3>
         <p data-testid="question-text">{he.decode(question)}</p>
-        <div data-testid="answer-options">
+        <div data-testid="answer-options" className="answers-list">
           {answers.sort(() => Math.random() - half)
             .map((answer) => (
               <button
                 type="button"
                 key={ answer }
+                onClick={ () => {
+                  document.querySelectorAll('.answer').forEach((item) => {
+                    item.classList.add('clicked');
+                  });
+                } }
+                className={ answer === correctAnswer
+                  ? 'answer correct'
+                  : 'answer wrong' }
                 data-testid={ answer === correctAnswer
                   ? 'correct-answer'
                   : `wrong-answer-${incorrectAnswer.indexOf(answer)}` }
