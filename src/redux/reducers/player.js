@@ -1,12 +1,14 @@
-const initialState = {
-  name: '',
-  assertions: '',
-  score: 0,
-  gravatarEmail: '',
+const INITIAL_STATE = {
+  playerData: {},
 };
 
-const playerReducer = (state = initialState, action) => {
+const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+  case 'SET_PLAYER_DATA':
+    return {
+      ...state,
+      playerData: action.playerData,
+    };
   default:
     return state;
   }
