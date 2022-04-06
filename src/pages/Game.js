@@ -2,6 +2,7 @@ import he from 'he';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 import { fetchToken } from '../redux/actions';
 
 class Game extends Component {
@@ -73,7 +74,7 @@ class Game extends Component {
 
     return (
       <div>
-        Game
+        <Header />
         {results.length
           ? this.renderQuestions()
           : ''}
