@@ -4,9 +4,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { fetchToken } from '../redux/actions';
+import { scorePlayer } from '../redux/actions/playerAction';
 import '../styles/Game.css';
 
 class Game extends Component {
+  countDown = 0;
+
   constructor() {
     super();
     this.state = {
@@ -14,12 +17,12 @@ class Game extends Component {
       index: 0,
       countdown: 30,
       isDisabled: false,
+      isDisabledNext: true,
     };
   }
 
   async componentDidMount() {
     const { getToken } = this.props;
-    const millisToSecond = 1000;
     const millisToThirtySeconds = 30000;
     const result = await this.requestQuestions();
     const requestFailed = 3;
@@ -27,18 +30,32 @@ class Game extends Component {
       await getToken();
       this.requestQuestions();
     }
-    const countDown = setInterval(() => {
-      this.setState((prevState) => ({
-        countdown: prevState.countdown - 1,
-      }));
-    }, millisToSecond);
+    this.countDown = this.createInterval();
 
     setTimeout(() => {
-      clearInterval(countDown);
+      clearInterval(this.countDown);
       this.setState({
         isDisabled: true,
+        isDisabledNext: false,
       });
     }, millisToThirtySeconds);
+  }
+
+  handleNextQuestion = () => {
+    const { index, results } = this.state;
+    const { history } = this.props;
+
+    clearInterval(this.countDown);
+    if (index === results.length - 1) {
+      history.push('/feedback');
+      return;
+    }
+    this.setState({ index: index + 1, isDisabled: false, countdown: 30 });
+    this.countDown = this.createInterval();
+
+    this.setState({
+      isDisabledNext: true,
+    });
   }
 
   requestQuestions = async () => {
@@ -57,11 +74,34 @@ class Game extends Component {
     return result;
   }
 
+  createInterval = () => {
+    const millisToSecond = 1000;
+    return setInterval(() => {
+      this.setState((prevState) => ({
+        countdown: prevState.countdown - 1,
+      }));
+    }, millisToSecond);
+  }
+
   renderQuestions = () => {
-    const { results, index, isDisabled } = this.state;
+    const { results, index, isDisabled, countdown, isDisabledNext } = this.state;
+    const three = 3;
+    const ten = 10;
+    const { getScore } = this.props;
     const { category, question,
       correct_answer: correctAnswer,
       incorrect_answers: incorrectAnswer, answers } = results[index];
+
+    const getDifficultyMultipler = () => {
+      if (results[index].difficulty === 'hard') {
+        return three;
+      } if (results[index].difficulty === 'medium') {
+        return 2;
+      }
+      return 1;
+    };
+
+    const scoreCalculation = (ten + (countdown * getDifficultyMultipler()));
 
     return (
       <>
@@ -77,6 +117,14 @@ class Game extends Component {
                 document.querySelectorAll('.answer').forEach((item) => {
                   item.classList.add('clicked');
                 });
+                clearInterval(this.countDown);
+                this.setState({
+                  isDisabledNext: false,
+                  isDisabled: true,
+                });
+                return (answer === correctAnswer)
+                  ? getScore(scoreCalculation)
+                  : getScore(0);
               } }
               className={ answer === correctAnswer
                 ? 'answer correct'
@@ -90,12 +138,19 @@ class Game extends Component {
           ))}
         </div>
         <br />
-        <button
-          type="button"
-          onClick={ () => this.setState({ index: index + 1 }) }
-        >
-          Próxima pergunta
-        </button>
+        {
+          isDisabledNext
+            ? ''
+            : (
+              <button
+                type="button"
+                data-testid="btn-next"
+                onClick={ this.handleNextQuestion }
+              >
+                Next
+              </button>
+            )
+        }
       </>
     );
   };
@@ -118,6 +173,8 @@ class Game extends Component {
 Game.propTypes = {
   token: PropTypes.string.isRequired,
   getToken: PropTypes.func.isRequired,
+  getScore: PropTypes.func.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -126,6 +183,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
+  getScore: (score) => dispatch(scorePlayer(score)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

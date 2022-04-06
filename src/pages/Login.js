@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions';
-import setPlayerData from '../redux/actions/playerAction';
+import namePlayer from '../redux/actions/playerAction';
 
 class Login extends Component {
   constructor() {
@@ -10,7 +10,6 @@ class Login extends Component {
     this.state = {
       name: '',
       email: '',
-      score: 0,
       isButtonDisabled: true,
     };
   }
@@ -30,10 +29,11 @@ class Login extends Component {
   }
 
   handleClickSubmit = async (event) => {
-    const { getToken, history, dispatchPlayerData } = this.props;
+    const { getToken, history, dispatchPlayer } = this.props;
+    const { email, name } = this.state;
     event.preventDefault();
     await getToken();
-    dispatchPlayerData(this.state);
+    dispatchPlayer(name, email);
     history.push('/play');
   }
 
@@ -91,13 +91,13 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
-  dispatchPlayerData: (playerData) => dispatch(setPlayerData(playerData)),
+  dispatchPlayer: (name, gravatar) => dispatch(namePlayer(name, gravatar)),
 });
 
 Login.propTypes = {
   getToken: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
-  dispatchPlayerData: PropTypes.func.isRequired,
+  dispatchPlayer: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
