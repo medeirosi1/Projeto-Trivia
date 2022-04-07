@@ -85,7 +85,7 @@ class Game extends Component {
   }
 
   renderQuestions = () => {
-    const { results, index, isDisabled, countdown, isDisabledNext } = this.state;
+    const { results, index, areAnswersDisabled, countdown, isNextDisabled } = this.state;
     const three = 3;
     const ten = 10;
     const { getScore } = this.props;
