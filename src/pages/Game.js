@@ -172,7 +172,7 @@ class Game extends Component {
 Game.propTypes = {
   token: PropTypes.string.isRequired,
   getToken: PropTypes.func.isRequired,
-  getScore: PropTypes.func.isRequired,
+  setScore: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
