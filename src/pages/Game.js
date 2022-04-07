@@ -182,7 +182,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
-  getScore: (score) => dispatch(scorePlayer(score)),
+  setScore: (score) => dispatch(scorePlayer(score)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
