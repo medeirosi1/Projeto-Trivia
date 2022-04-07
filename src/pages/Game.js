@@ -54,7 +54,7 @@ class Game extends Component {
       index: index + 1,
       areAnswersDisabled: false,
       isNextDisabled: true,
-      countdown: 30
+      countdown: 30,
     });
     this.countDown = this.createInterval();
   }
@@ -113,7 +113,7 @@ class Game extends Component {
             <button
               type="button"
               key={ answer }
-              disabled={ isDisabled }
+              disabled={ areAnswersDisabled }
               onClick={ () => {
                 document.querySelectorAll('.answer').forEach((item) => {
                   item.classList.add('clicked');
