@@ -50,12 +50,13 @@ class Game extends Component {
       history.push('/feedback');
       return;
     }
-    this.setState({ index: index + 1, isDisabled: false, countdown: 30 });
-    this.countDown = this.createInterval();
-
     this.setState({
-      isDisabledNext: true,
+      index: index + 1,
+      areAnswersDisabled: false,
+      isNextDisabled: true,
+      countdown: 30
     });
+    this.countDown = this.createInterval();
   }
 
   requestQuestions = async () => {
