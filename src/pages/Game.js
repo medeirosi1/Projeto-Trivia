@@ -124,8 +124,8 @@ class Game extends Component {
                   areAnswersDisabled: true,
                 });
                 return (answer === correctAnswer)
-                  ? getScore(scoreCalculation)
-                  : getScore(0);
+                  ? setScore(scoreCalculation)
+                  : setScore(0);
               } }
               className={ answer === correctAnswer
                 ? 'answer correct'
