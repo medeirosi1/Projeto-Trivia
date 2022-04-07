@@ -16,8 +16,8 @@ class Game extends Component {
       results: [],
       index: 0,
       countdown: 30,
-      isDisabled: false,
-      isDisabledNext: true,
+      areAnswersDisabled: false,
+      isNextDisabled: true,
     };
   }
 
