@@ -86,23 +86,21 @@ class Game extends Component {
 
   renderQuestions = () => {
     const { results, index, areAnswersDisabled, countdown, isNextDisabled } = this.state;
-    const three = 3;
-    const ten = 10;
+    const hardMultiplier = 3;
+    const mediumMultiplier = 2;
+    const basePoints = 10;
     const { setScore } = this.props;
     const { category, question,
       correct_answer: correctAnswer,
       incorrect_answers: incorrectAnswer, answers } = results[index];
 
     const getDifficultyMultipler = () => {
-      if (results[index].difficulty === 'hard') {
-        return three;
-      } if (results[index].difficulty === 'medium') {
-        return 2;
-      }
+      if (results[index].difficulty === 'hard') return hardMultiplier;
+      if (results[index].difficulty === 'medium') return mediumMultiplier;
       return 1;
     };
 
-    const scoreCalculation = (ten + (countdown * getDifficultyMultipler()));
+    const scoreCalculation = (basePoints + (countdown * getDifficultyMultipler()));
 
     return (
       <>
