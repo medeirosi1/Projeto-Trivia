@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 import { fetchToken } from '../redux/actions';
-import { scorePlayer } from '../redux/actions/playerAction';
+import { assertionPlayer, scorePlayer } from '../redux/actions/playerAction';
 import '../styles/Game.css';
 
 class Game extends Component {
@@ -37,7 +37,7 @@ class Game extends Component {
   }
 
   handleSelectAnswer = (answer) => {
-    const { setScore } = this.props;
+    const { setScore, setAssertion } = this.props;
     const { results, index } = this.state;
     const { correct_answer: correctAnswer } = results[index];
     document.querySelectorAll('.answer').forEach((item) => {
@@ -48,6 +48,9 @@ class Game extends Component {
       isNextDisabled: false,
       areAnswersDisabled: true,
     });
+
+    if (answer === correctAnswer) { setAssertion(1); }
+
     return (answer === correctAnswer)
       ? setScore(this.calculateScore())
       : setScore(0);
@@ -185,6 +188,7 @@ Game.propTypes = {
   getToken: PropTypes.func.isRequired,
   setScore: PropTypes.func.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  setAssertion: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -194,6 +198,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
   setScore: (score) => dispatch(scorePlayer(score)),
+  setAssertion: (hit) => dispatch(assertionPlayer(hit)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);
