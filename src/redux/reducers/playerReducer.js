@@ -1,5 +1,8 @@
 const INITIAL_STATE = {
-  playerData: {},
+  name: '',
+  assertions: '',
+  score: 0,
+  gravatarEmail: '',
 };
 
 const playerReducer = (state = INITIAL_STATE, action) => {
@@ -7,7 +10,13 @@ const playerReducer = (state = INITIAL_STATE, action) => {
   case 'SET_PLAYER_DATA':
     return {
       ...state,
-      playerData: action.playerData,
+      name: action.name,
+      gravatarEmail: action.gravatarEmail,
+    };
+  case 'SET_PLAYER_SCORE':
+    return {
+      ...state,
+      score: state.score + action.score,
     };
   default:
     return state;

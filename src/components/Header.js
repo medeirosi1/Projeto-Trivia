@@ -15,7 +15,6 @@ class Header extends Component {
         />
         <h1 data-testid="header-player-name">{name}</h1>
         <h2 data-testid="header-score">
-          Pontuação:
           {' '}
           {score}
         </h2>
@@ -25,9 +24,9 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  name: state.player.playerData.name,
-  email: state.player.playerData.email,
-  score: state.player.playerData.score,
+  name: state.player.name,
+  email: state.player.gravatarEmail,
+  score: state.player.score,
 });
 
 Header.defaultProps = {
