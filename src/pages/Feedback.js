@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends Component {
+  handleRouteBtnClick = () => {
+    const { history } = this.props;
+    history.push('/');
+  }
+
   render() {
     const { assertion, score } = this.props;
     const hit = 3;
@@ -18,6 +23,13 @@ class Feedback extends Component {
         }
         <p data-testid="feedback-total-score">{score}</p>
         <p data-testid="feedback-total-question">{assertion}</p>
+        <button
+          data-testid="btn-play-again"
+          type="button"
+          onClick={ this.handleRouteBtnClick }
+        >
+          Play Again
+        </button>
       </div>
     );
   }
@@ -31,6 +43,7 @@ const mapStateToProps = (state) => ({
 Feedback.propTypes = {
   assertion: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  history: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps)(Feedback);
