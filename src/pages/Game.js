@@ -10,6 +10,8 @@ import '../styles/Game.css';
 class Game extends Component {
   countDown = 0;
 
+  timeOut = 0;
+
   constructor() {
     super();
     this.state = {
@@ -23,7 +25,7 @@ class Game extends Component {
 
   async componentDidMount() {
     const { getToken } = this.props;
-    const millisToThirtySeconds = 30000;
+    // const millisToThirtySeconds = 30000;
     const result = await this.requestQuestions();
     const requestFailed = 3;
     if (result.response_code === requestFailed) {
@@ -31,14 +33,24 @@ class Game extends Component {
       this.requestQuestions();
     }
     this.countDown = this.createInterval();
+    this.timeOut = this.createTimeout();
+  }
 
-    setTimeout(() => {
-      clearInterval(this.countDown);
-      this.setState({
-        areAnswersDisabled: true,
-        isNextDisabled: false,
-      });
-    }, millisToThirtySeconds);
+  handleSelectAnswer = (answer) => {
+    const { setScore } = this.props;
+    const { results, index } = this.state;
+    const { correct_answer: correctAnswer } = results[index];
+    document.querySelectorAll('.answer').forEach((item) => {
+      item.classList.add('clicked');
+    });
+    clearInterval(this.countDown);
+    this.setState({
+      isNextDisabled: false,
+      areAnswersDisabled: true,
+    });
+    return (answer === correctAnswer)
+      ? setScore(this.calculateScore())
+      : setScore(0);
   }
 
   handleNextQuestion = () => {
@@ -46,6 +58,7 @@ class Game extends Component {
     const { history } = this.props;
 
     clearInterval(this.countDown);
+    clearTimeout(this.timeOut);
     if (index === results.length - 1) {
       history.push('/feedback');
       return;
@@ -57,6 +70,7 @@ class Game extends Component {
       countdown: 30,
     });
     this.countDown = this.createInterval();
+    this.timeOut = this.createTimeout();
   }
 
   requestQuestions = async () => {
@@ -78,29 +92,40 @@ class Game extends Component {
   createInterval = () => {
     const millisToSecond = 1000;
     return setInterval(() => {
-      this.setState((prevState) => ({
-        countdown: prevState.countdown - 1,
-      }));
+      const { countdown } = this.state;
+      if (countdown === 1) clearInterval(this.countDown);
+      this.setState((prevState) => ({ countdown: prevState.countdown - 1 }));
     }, millisToSecond);
   }
 
-  renderQuestions = () => {
-    const { results, index, areAnswersDisabled, countdown, isNextDisabled } = this.state;
+  createTimeout = () => {
+    const millisToThirtySeconds = 30000;
+    return setTimeout(() => {
+      this.setState({
+        areAnswersDisabled: true,
+        isNextDisabled: false,
+      });
+    }, millisToThirtySeconds);
+  }
+
+  calculateScore = () => {
+    const { results, index, countdown } = this.state;
+    let multiplier = 1;
     const hardMultiplier = 3;
     const mediumMultiplier = 2;
     const basePoints = 10;
-    const { setScore } = this.props;
+
+    if (results[index].difficulty === 'hard') multiplier = hardMultiplier;
+    if (results[index].difficulty === 'medium') multiplier = mediumMultiplier;
+
+    return (basePoints + (countdown * multiplier));
+  };
+
+  renderQuestions = () => {
+    const { results, index, areAnswersDisabled, isNextDisabled } = this.state;
     const { category, question,
       correct_answer: correctAnswer,
       incorrect_answers: incorrectAnswer, answers } = results[index];
-
-    const getDifficultyMultipler = () => {
-      if (results[index].difficulty === 'hard') return hardMultiplier;
-      if (results[index].difficulty === 'medium') return mediumMultiplier;
-      return 1;
-    };
-
-    const scoreCalculation = (basePoints + (countdown * getDifficultyMultipler()));
 
     return (
       <>
@@ -112,19 +137,7 @@ class Game extends Component {
               type="button"
               key={ answer }
               disabled={ areAnswersDisabled }
-              onClick={ () => {
-                document.querySelectorAll('.answer').forEach((item) => {
-                  item.classList.add('clicked');
-                });
-                clearInterval(this.countDown);
-                this.setState({
-                  isNextDisabled: false,
-                  areAnswersDisabled: true,
-                });
-                return (answer === correctAnswer)
-                  ? setScore(scoreCalculation)
-                  : setScore(0);
-              } }
+              onClick={ () => this.handleSelectAnswer(answer) }
               className={ answer === correctAnswer
                 ? 'answer correct'
                 : 'answer wrong' }
