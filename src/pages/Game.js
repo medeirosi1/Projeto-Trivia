@@ -88,7 +88,7 @@ class Game extends Component {
     const { results, index, areAnswersDisabled, countdown, isNextDisabled } = this.state;
     const three = 3;
     const ten = 10;
-    const { getScore } = this.props;
+    const { setScore } = this.props;
     const { category, question,
       correct_answer: correctAnswer,
       incorrect_answers: incorrectAnswer, answers } = results[index];
