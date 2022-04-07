@@ -35,8 +35,8 @@ class Game extends Component {
     setTimeout(() => {
       clearInterval(this.countDown);
       this.setState({
-        isDisabled: true,
-        isDisabledNext: false,
+        areAnswersDisabled: true,
+        isNextDisabled: false,
       });
     }, millisToThirtySeconds);
   }
