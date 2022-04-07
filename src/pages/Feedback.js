@@ -1,9 +1,22 @@
+import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class Feedback extends Component {
+  componentDidMount() {
+    const { player: { name, score, gravatarEmail } } = this.props;
+    const picture = `https://www.gravatar.com/avatar/${md5(gravatarEmail).toString()}`;
+    const newUser = {
+      name,
+      score,
+      picture,
+    };
+    const rankingList = JSON.parse(localStorage.getItem('ranking')) || [];
+    localStorage.setItem('ranking', JSON.stringify([...rankingList, newUser]));
+  }
+
   handleRouteBtnClick = () => {
     const { history } = this.props;
     history.push('/');
@@ -44,6 +57,7 @@ class Feedback extends Component {
 
 const mapStateToProps = (state) => ({
   assertion: state.player.assertions,
+  player: state.player,
   score: state.player.score,
 });
 
@@ -51,6 +65,7 @@ Feedback.propTypes = {
   assertion: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
   history: PropTypes.objectOf(PropTypes.any).isRequired,
+  player: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default connect(mapStateToProps)(Feedback);
