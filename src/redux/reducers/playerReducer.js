@@ -12,6 +12,7 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.name,
       gravatarEmail: action.gravatarEmail,
+      score: 0,
     };
   case 'SET_PLAYER_SCORE':
     return {
