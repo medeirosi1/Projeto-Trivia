@@ -120,8 +120,8 @@ class Game extends Component {
                 });
                 clearInterval(this.countDown);
                 this.setState({
-                  isDisabledNext: false,
-                  isDisabled: true,
+                  isNextDisabled: false,
+                  areAnswersDisabled: true,
                 });
                 return (answer === correctAnswer)
                   ? getScore(scoreCalculation)
