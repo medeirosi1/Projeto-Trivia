@@ -140,17 +140,15 @@ class Game extends Component {
         </div>
         <br />
         {
-          isDisabledNext
-            ? ''
-            : (
-              <button
-                type="button"
-                data-testid="btn-next"
-                onClick={ this.handleNextQuestion }
-              >
-                Next
-              </button>
-            )
+          !isNextDisabled && (
+            <button
+              type="button"
+              data-testid="btn-next"
+              onClick={ this.handleNextQuestion }
+            >
+              Next
+            </button>
+          )
         }
       </>
     );
