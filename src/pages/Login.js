@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { FiSettings } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions';
 import namePlayer from '../redux/actions/playerAction';
+import '../styles/Login.css';
 
 class Login extends Component {
   constructor() {
@@ -45,17 +47,9 @@ class Login extends Component {
   render() {
     const { name, email, isButtonDisabled } = this.state;
     return (
-      <div>
-        <header>
-          <button
-            type="button"
-            data-testid="btn-settings"
-            onClick={ this.handleSettingsBtnClick }
-          >
-            Configuração
-          </button>
-        </header>
+      <main className="login-main">
         <form>
+          <img src="./neon.svg" />
           <h1>Login</h1>
           <input
             type="text"
@@ -76,6 +70,7 @@ class Login extends Component {
             required
           />
           <button
+            className={ isButtonDisabled ? 'play-btn-disable' : 'play-btn-able' }
             type="submit"
             data-testid="btn-play"
             disabled={ isButtonDisabled }
@@ -83,8 +78,18 @@ class Login extends Component {
           >
             PLAY
           </button>
+          <button
+            className="settings-btn"
+            type="button"
+            data-testid="btn-settings"
+            id="setting"
+            onClick={ this.handleSettingsBtnClick }
+          >
+            <FiSettings className="settings-icon" />
+            Configuração
+          </button>
         </form>
-      </div>
+      </main>
     );
   }
 }
