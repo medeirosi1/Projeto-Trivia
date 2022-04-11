@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { FaPlay } from 'react-icons/fa';
 import { FiSettings } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { fetchToken } from '../redux/actions';
@@ -49,7 +50,7 @@ class Login extends Component {
     return (
       <main className="login-main">
         <form>
-          <img src="./neon.svg" />
+          <img className="blink" src="./neon.svg" alt="" />
           <h1>Login</h1>
           <input
             type="text"
@@ -58,6 +59,7 @@ class Login extends Component {
             value={ name }
             data-testid="input-player-name"
             onChange={ this.handleChange }
+            maxLength="30"
             required
           />
           <input
@@ -67,15 +69,37 @@ class Login extends Component {
             value={ email }
             data-testid="input-gravatar-email"
             onChange={ this.handleChange }
+            maxLength="30"
             required
           />
-          <button
+          <div className="buttons-container">
+            <button
+              className={ isButtonDisabled ? 'play-btn-disable' : 'play-btn-able' }
+              type="submit"
+              data-testid="btn-play"
+              disabled={ isButtonDisabled }
+              onClick={ this.handleClickSubmit }
+            >
+              <FaPlay className="icon" />
+            </button>
+            <button
+              className="settings-btn"
+              type="button"
+              data-testid="btn-settings"
+              id="setting"
+              onClick={ this.handleSettingsBtnClick }
+            >
+              <FiSettings className="icon" />
+            </button>
+          </div>
+          {/* <button
             className={ isButtonDisabled ? 'play-btn-disable' : 'play-btn-able' }
             type="submit"
             data-testid="btn-play"
             disabled={ isButtonDisabled }
             onClick={ this.handleClickSubmit }
           >
+            <FaPlay className="icon" />
             PLAY
           </button>
           <button
@@ -85,9 +109,9 @@ class Login extends Component {
             id="setting"
             onClick={ this.handleSettingsBtnClick }
           >
-            <FiSettings className="settings-icon" />
-            Configuração
-          </button>
+            <FiSettings className="icon" />
+            SETTINGS
+          </button> */}
         </form>
       </main>
     );

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { FaPlay } from 'react-icons/fa';
 import '../styles/Ranking.css';
 
 class Ranking extends Component {
@@ -8,21 +9,38 @@ class Ranking extends Component {
   render() {
     const { history } = this.props;
     return (
-      <div>
-        <h1 data-testid="ranking-title">Ranking</h1>
+      <div className="ranking-container">
+        <div className="ranking-header">
+          <img src="./neon.svg" alt="" />
+          <h1 data-testid="ranking-title">Ranking</h1>
+        </div>
         {this.ranking.sort((a, b) => b.score - a.score).map((user, index) => (
           <div className="ranking-card" key={ index }>
-            <img src={ user.picture } alt="" />
-            <h4 data-testid={ `player-name-${index}` }>{ user.name }</h4>
-            <p data-testid={ `player-score-${index}` }>{ user.score }</p>
+            <div className="ranking-user">
+              <img src={ user.picture } alt="" className="img-gravatar" />
+              <h4
+                data-testid={ `player-name-${index}` }
+                className="ranking-name"
+              >
+                { user.name }
+              </h4>
+            </div>
+            <p
+              data-testid={ `player-score-${index}` }
+              className="ranking-score"
+            >
+              { user.score }
+            </p>
           </div>
         ))}
         <button
           type="button"
           data-testid="btn-go-home"
           onClick={ () => history.push('/') }
+          className="play-again-btn"
         >
-          Jogar
+          <FaPlay />
+          Play
         </button>
       </div>
     );
