@@ -131,8 +131,8 @@ class Game extends Component {
       incorrect_answers: incorrectAnswer, answers } = results[index];
 
     return (
-      <>
-        <h3 data-testid="question-category">{category}</h3>
+      <div className="game-container">
+        <h2 data-testid="question-category">{category}</h2>
         <p data-testid="question-text">{he.decode(question)}</p>
         <div data-testid="answer-options" className="answers-list">
           {answers.map((answer) => (
@@ -152,19 +152,20 @@ class Game extends Component {
             </button>
           ))}
         </div>
-        <br />
+        {/* <br /> */}
         {
           !isNextDisabled && (
             <button
               type="button"
               data-testid="btn-next"
+              className="btn-next"
               onClick={ this.handleNextQuestion }
             >
               Next
             </button>
           )
         }
-      </>
+      </div>
     );
   };
 
@@ -173,11 +174,10 @@ class Game extends Component {
 
     return (
       <div>
-        <Header />
+        <Header timer={ countdown } />
         {results.length
           ? this.renderQuestions()
           : ''}
-        <p>{countdown}</p>
       </div>
     );
   }
